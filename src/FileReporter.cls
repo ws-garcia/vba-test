@@ -36,8 +36,8 @@ Private Finished As Boolean
 ''
 ' Report test results to the given file path
 ''
-Public Sub WriteTo(Path As Variant)
-    FilePath = Path
+Public Sub WriteTo(path As Variant)
+    FilePath = path
 End Sub
 
 ''
@@ -59,16 +59,16 @@ Private Sub PrintHeader(Suite As TestSuite)
     AppendToFile "===" & VBA.IIf(Suite.Description <> "", " " & Suite.Description & " ===", "")
 End Sub
 
-Private Sub PrintResult(Test As TestCase)
-    If Test.Result = TestResultType.Skipped Then
+Private Sub PrintResult(test As TestCase)
+    If test.Result = TestResultType.Skipped Then
         Exit Sub
     End If
 
-    AppendToFile ResultTypeToString(Test.Result) & " " & Test.Description
+    AppendToFile ResultTypeToString(test.Result) & " " & test.Description
     
-    If Test.Result = TestResultType.Fail Then
+    If test.Result = TestResultType.Fail Then
         Dim Failure As Variant
-        For Each Failure In Test.Failures
+        For Each Failure In test.Failures
             AppendToFile "  " & Failure
         Next Failure
     End If
@@ -81,11 +81,11 @@ Private Sub PrintSummary()
     Dim Pending As Long
     Dim Skipped As Long
     
-    Total = pSuite.Tests.Count
-    Passed = pSuite.PassedTests.Count
-    Failed = pSuite.FailedTests.Count
-    Pending = pSuite.PendingTests.Count
-    Skipped = pSuite.SkippedTests.Count
+    Total = pSuite.Tests.count
+    Passed = pSuite.PassedTests.count
+    Failed = pSuite.FailedTests.count
+    Pending = pSuite.PendingTests.count
+    Skipped = pSuite.SkippedTests.count
     
     Dim Summary As String
     If Failed > 0 Then
@@ -131,8 +131,8 @@ Cleanup:
     Close #File
 End Sub
 
-Private Sub pSuite_Result(Test As TestCase)
-    PrintResult Test
+Private Sub pSuite_Result(test As TestCase)
+    PrintResult test
 End Sub
 
 Private Sub pSuite_Group(Suite As TestSuite)

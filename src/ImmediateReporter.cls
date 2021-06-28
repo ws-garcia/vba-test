@@ -46,10 +46,10 @@ Public Sub ListenTo(Suite As TestSuite)
     PrintHeader Suite
 
     ' Report any tests added prior to listening
-    Dim Test As TestCase
-    For Each Test In Suite.Tests
-        PrintResult Test
-    Next Test
+    Dim test As TestCase
+    For Each test In Suite.Tests
+        PrintResult test
+    Next test
 End Sub
 
 ' ============================================= '
@@ -58,16 +58,16 @@ Private Sub PrintHeader(Suite As TestSuite)
     Debug.Print "===" & IIf(Suite.Description <> "", " " & Suite.Description & " ===", "")
 End Sub
 
-Private Sub PrintResult(Test As TestCase)
-    If Test.Result = TestResultType.Skipped Then
+Private Sub PrintResult(test As TestCase)
+    If test.Result = TestResultType.Skipped Then
         Exit Sub
     End If
 
-    Debug.Print ResultTypeToString(Test.Result) & " " & Test.Description
+    Debug.Print ResultTypeToString(test.Result) & " " & test.Description
     
-    If Test.Result = TestResultType.Fail Then
+    If test.Result = TestResultType.Fail Then
         Dim Failure As Variant
-        For Each Failure In Test.Failures
+        For Each Failure In test.Failures
             Debug.Print "  " & Failure
         Next Failure
     End If
@@ -80,11 +80,11 @@ Private Sub PrintSummary()
     Dim Pending As Long
     Dim Skipped As Long
     
-    Total = pSuite.Tests.Count
-    Passed = pSuite.PassedTests.Count
-    Failed = pSuite.FailedTests.Count
-    Pending = pSuite.PendingTests.Count
-    Skipped = pSuite.SkippedTests.Count
+    Total = pSuite.Tests.count
+    Passed = pSuite.PassedTests.count
+    Failed = pSuite.FailedTests.count
+    Pending = pSuite.PendingTests.count
+    Skipped = pSuite.SkippedTests.count
     
     Dim Summary As String
     If Failed > 0 Then
@@ -119,8 +119,8 @@ Private Sub pSuite_Group(Suite As TestSuite)
     PrintHeader Suite
 End Sub
 
-Private Sub pSuite_Result(Test As TestCase)
-    PrintResult Test
+Private Sub pSuite_Result(test As TestCase)
+    PrintResult test
 End Sub
 
 Private Sub Class_Terminate()

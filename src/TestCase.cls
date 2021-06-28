@@ -65,9 +65,9 @@ Public Suite As TestSuite
 Public Property Get Result() As TestResultType
     If Me.Skipped Then
         Result = TestResultType.Skipped
-    ElseIf Me.Successes = 0 And Me.Failures.Count = 0 Then
+    ElseIf Me.Successes = 0 And Me.Failures.count = 0 Then
         Result = TestResultType.Pending
-    ElseIf Me.Failures.Count > 0 Then
+    ElseIf Me.Failures.count > 0 Then
         Result = TestResultType.Fail
     Else
         Result = TestResultType.Pass
@@ -76,7 +76,7 @@ End Property
 
 Public Property Get Failures() As VBA.Collection
     Dim Total As Long
-    Total = Me.Successes + pFailures.Count
+    Total = Me.Successes + pFailures.count
     
     If Me.Planned > 0 And Me.Planned <> Total Then
         Dim Message As String
@@ -104,19 +104,19 @@ End Property
 ''
 ' Check if two values are deep equal (including Array, Collection, and Dictionary)
 ''
-Public Sub IsEqual(A As Variant, B As Variant, Optional Message As String = _
+Public Sub IsEqual(a As Variant, B As Variant, Optional Message As String = _
     "Expected {0} to equal {1}")
 
-    Check IsDeepEqual(A, B), Message, A, B
+    Check IsDeepEqual(a, B), Message, a, B
 End Sub
 
 ''
 ' Check if two values are not deep equal (including Array, Collection, and Dictionary)
 ''
-Public Sub NotEqual(A As Variant, B As Variant, Optional Message As String = _
+Public Sub NotEqual(a As Variant, B As Variant, Optional Message As String = _
     "Expected {0} to not equal {1}")
 
-    Check Not IsDeepEqual(A, B), Message, A, B
+    Check Not IsDeepEqual(a, B), Message, a, B
 End Sub
 
 ''
@@ -127,37 +127,37 @@ End Sub
 ' Must evaluate to True or False, or to a data type that is implicitly convertible to Boolean.
 ' If the expression is a Nullable Boolean variable that evaluates to Nothing, the condition is treated as if the expression is False.
 ''
-Public Sub IsOk(Value As Variant, Optional Message As String = _
+Public Sub IsOk(value As Variant, Optional Message As String = _
     "Expected {0} to be ok")
 
-    Check Value, Message, Value
+    Check value, Message, value
 End Sub
 
 ''
 ' Check if a value is not "truthy" (See .IsOk)
 ''
-Public Sub NotOk(Value As Variant, Optional Message As String = _
+Public Sub NotOk(value As Variant, Optional Message As String = _
     "Expected {0} to not be ok")
 
-    Check Not CBool(Value), Message, Value
+    Check Not CBool(value), Message, value
 End Sub
 
 ''
 ' Check if a value is "undefined": Nothing, Empty, Null, or Missing
 ''
-Public Sub IsUndefined(Optional Value As Variant, Optional Message As String = _
+Public Sub IsUndefined(Optional value As Variant, Optional Message As String = _
     "Expected {0} to be undefined")
 
-    Check IsNothing(Value) Or VBA.IsEmpty(Value) Or VBA.IsNull(Value) Or VBA.IsMissing(Value), Message, Value
+    Check IsNothing(value) Or VBA.IsEmpty(value) Or VBA.IsNull(value) Or VBA.IsMissing(value), Message, value
 End Sub
 
 ''
 ' Check if a value is not "undefined": Nothing, Empty, Null, or Missing
 ''
-Public Sub NotUndefined(Value As Variant, Optional Message As String = _
+Public Sub NotUndefined(value As Variant, Optional Message As String = _
     "Expected {0} to not be undefined")
 
-    Check Not IsNothing(Value) And Not VBA.IsEmpty(Value) And Not VBA.IsNull(Value) And Not VBA.IsMissing(Value), Message, Value
+    Check Not IsNothing(value) And Not VBA.IsEmpty(value) And Not VBA.IsNull(value) And Not VBA.IsMissing(value), Message, value
 End Sub
 
 ''
@@ -186,30 +186,30 @@ End Sub
 ''
 ' Check if a value is included in an arbitrarily nested Array or Collection
 ''
-Public Sub Includes(Values As Variant, Value As Variant, Optional Message As String = _
+Public Sub Includes(values As Variant, value As Variant, Optional Message As String = _
     "Expected {1} to be included in {0}")
 
-    If IsCollection(Values) Then
-        Check CollectionIncludes(Values, Value), Message, Values, Value
-    ElseIf IsArray(Values) Then
-        Check ArrayIncludes(Values, Value), Message, Values, Value
+    If IsCollection(values) Then
+        Check CollectionIncludes(values, value), Message, values, value
+    ElseIf IsArray(values) Then
+        Check ArrayIncludes(values, value), Message, values, value
     Else
-        pFailures.Add FormatMessage(Message, Values, Value) & " (Incompatible type for Values)"
+        pFailures.Add FormatMessage(Message, values, value) & " (Incompatible type for Values)"
     End If
 End Sub
 
 ''
 ' Check if a value is not included in an arbitrarily nested Array or Collection
 ''
-Public Sub NotIncludes(Values As Variant, Value As Variant, Optional Message As String = _
+Public Sub NotIncludes(values As Variant, value As Variant, Optional Message As String = _
     "Expected {1} not to be included in {0}")
     
-    If IsCollection(Values) Then
-        Check Not CollectionIncludes(Values, Value), Message, Values, Value
-    ElseIf IsArray(Values) Then
-        Check Not ArrayIncludes(Values, Value), Message, Values, Value
+    If IsCollection(values) Then
+        Check Not CollectionIncludes(values, value), Message, values, value
+    ElseIf IsArray(values) Then
+        Check Not ArrayIncludes(values, value), Message, values, value
     Else
-        pFailures.Add FormatMessage(Message, Values, Value) & " (Incompatible type for Values)"
+        pFailures.Add FormatMessage(Message, values, value) & " (Incompatible type for Values)"
     End If
 End Sub
 
@@ -222,13 +222,13 @@ End Sub
 ' ' Equivalent to .IsEqual 1.00e+0, 1.00e+0
 ' ```
 ''
-Public Sub IsApproximate(A As Variant, B As Variant, SignificantFigures As Integer, Optional Message As String = _
+Public Sub IsApproximate(a As Variant, B As Variant, SignificantFigures As Integer, Optional Message As String = _
     "Expected {0} to be approximately equal to {1} (with {2} significant figures of precision)")
 
     If SignificantFigures < 1 Or SignificantFigures > 15 Then
         pFailures.Add "IsApproximate can only compare from 1 to 15 significant figures"
     Else
-        Check IsApproximatelyEqual(A, B, SignificantFigures), Message, A, B, SignificantFigures
+        Check IsApproximatelyEqual(a, B, SignificantFigures), Message, a, B, SignificantFigures
     End If
 End Sub
 
@@ -241,13 +241,13 @@ End Sub
 ' ' Equivalent to .IsEqual 1.00e+0, 1.01e+0
 ' ```
 ''
-Public Sub NotApproximate(A As Variant, B As Variant, SignificantFigures As Integer, Optional Message As String = _
+Public Sub NotApproximate(a As Variant, B As Variant, SignificantFigures As Integer, Optional Message As String = _
     "Expected {0} to not be approximately equal to {1} (with {2} significant figures of precision)")
 
     If SignificantFigures < 1 Or SignificantFigures > 15 Then
         pFailures.Add "NotApproximate can only compare from 1 to 15 significant figures"
     Else
-        Check Not IsApproximatelyEqual(A, B, SignificantFigures), Message, A, B, SignificantFigures
+        Check Not IsApproximatelyEqual(a, B, SignificantFigures), Message, a, B, SignificantFigures
     End If
 End Sub
 
@@ -271,8 +271,8 @@ End Sub
 ''
 ' Set the planned number of assertions for the test
 ''
-Public Sub Plan(Count As Long)
-    Planned = Count
+Public Sub Plan(count As Long)
+    Planned = count
 End Sub
 
 ''
@@ -284,59 +284,61 @@ End Sub
 
 ' ============================================= '
 
-Private Sub Check(Assertion As Variant, Message As String, ParamArray Values() As Variant)
+Private Sub Check(Assertion As Variant, Message As String, ParamArray values() As Variant)
     If Assertion Then
         Me.Successes = Me.Successes + 1
     Else
-        pFailures.Add FormatMessage(Message, Values)
+        pFailures.Add FormatMessage(Message, values)
     End If
 End Sub
 
-Private Function IsDeepEqual(A As Variant, B As Variant) As Boolean
+Private Function IsDeepEqual(a As Variant, B As Variant) As Boolean
     Dim AType As VbVarType
     Dim BType As VbVarType
     
-    AType = VBA.VarType(A)
+    AType = VBA.VarType(a)
     BType = VBA.VarType(B)
 
-    If VBA.IsError(A) Or VBA.IsError(B) Then
+    If VBA.IsError(a) Or VBA.IsError(B) Then
         IsDeepEqual = False
         
-    ElseIf VBA.IsArray(A) And VBA.IsArray(B) Then
-        IsDeepEqual = IsArrayEqual(A, B)
+    ElseIf VBA.IsArray(a) And VBA.IsArray(B) Then
+        IsDeepEqual = IsArrayEqual(a, B)
     
     ElseIf AType = VBA.vbObject Or BType = VBA.vbObject Then
-        If AType <> BType Or VBA.TypeName(A) <> VBA.TypeName(B) Then
+        If AType <> BType Or VBA.TypeName(a) <> VBA.TypeName(B) Then
             IsDeepEqual = False
-        ElseIf VBA.TypeName(A) = "Collection" Then
-            IsDeepEqual = IsCollectionEqual(A, B)
-        ElseIf VBA.TypeName(A) = "Dictionary" Then
-            IsDeepEqual = IsDictionaryEqual(A, B)
+        ElseIf VBA.TypeName(a) = "Collection" Then
+            IsDeepEqual = IsCollectionEqual(a, B)
+        ElseIf VBA.TypeName(a) = "Dictionary" Then
+            IsDeepEqual = IsDictionaryEqual(a, B)
+        ElseIf VBA.TypeName(a) = "ECPArrayList" Then
+            IsDeepEqual = IsECPArrayListEqual(a, B)
         Else
-            IsDeepEqual = A Is B
+            IsDeepEqual = a Is B
         End If
     
-    ElseIf VBA.VarType(A) = VBA.vbDouble Or VBA.VarType(B) = VBA.vbDouble Then
+    ElseIf VBA.VarType(a) = VBA.vbDouble Or VBA.VarType(B) = VBA.vbDouble Then
         ' It is inherently difficult/almost impossible to check equality of Double
         ' http://support.microsoft.com/kb/78113
         '
         ' -> Compare up to 15 significant figures
-        IsDeepEqual = IsApproximatelyEqual(A, B, 15)
+        IsDeepEqual = IsApproximatelyEqual(a, B, 15)
     
     Else
-        IsDeepEqual = A = B
+        IsDeepEqual = a = B
     End If
 End Function
 
-Private Function IsArrayEqual(A As Variant, B As Variant) As Boolean
-    If UBound(A) <> UBound(B) Then
+Private Function IsArrayEqual(a As Variant, B As Variant) As Boolean
+    If UBound(a) <> UBound(B) Then
         IsArrayEqual = False
         Exit Function
     End If
     
     Dim i As Long
-    For i = LBound(A) To UBound(A)
-        If Not IsDeepEqual(A(i), B(i)) Then
+    For i = LBound(a) To UBound(a)
+        If Not IsDeepEqual(a(i), B(i)) Then
             IsArrayEqual = False
             Exit Function
         End If
@@ -345,15 +347,15 @@ Private Function IsArrayEqual(A As Variant, B As Variant) As Boolean
     IsArrayEqual = True
 End Function
 
-Private Function IsCollectionEqual(A As Variant, B As Variant) As Boolean
-    If A.Count <> B.Count Then
+Private Function IsCollectionEqual(a As Variant, B As Variant) As Boolean
+    If a.count <> B.count Then
         IsCollectionEqual = False
         Exit Function
     End If
     
     Dim i As Long
-    For i = 1 To A.Count
-        If Not IsDeepEqual(A(i), B(i)) Then
+    For i = 1 To a.count
+        If Not IsDeepEqual(a(i), B(i)) Then
             IsCollectionEqual = False
             Exit Function
         End If
@@ -361,9 +363,24 @@ Private Function IsCollectionEqual(A As Variant, B As Variant) As Boolean
 
     IsCollectionEqual = True
 End Function
+Private Function IsECPArrayListEqual(a As Variant, B As Variant) As Boolean
+    If a.count <> B.count Then
+        IsECPArrayListEqual = False
+        Exit Function
+    End If
+    
+    Dim i As Long
+    For i = 0 To a.count - 1
+        If Not IsDeepEqual(a(i), B(i)) Then
+            IsECPArrayListEqual = False
+            Exit Function
+        End If
+    Next i
 
-Private Function IsDictionaryEqual(A As Variant, B As Variant) As Boolean
-    If UBound(A.Keys) <> UBound(B.Keys) Then
+    IsECPArrayListEqual = True
+End Function
+Private Function IsDictionaryEqual(a As Variant, B As Variant) As Boolean
+    If UBound(a.Keys) <> UBound(B.Keys) Then
         IsDictionaryEqual = False
         Exit Function
     End If
@@ -372,11 +389,11 @@ Private Function IsDictionaryEqual(A As Variant, B As Variant) As Boolean
     Dim BKeys As Variant
     Dim i As Long
     
-    AKeys = A.Keys
+    AKeys = a.Keys
     BKeys = B.Keys
     
     For i = LBound(AKeys) To UBound(AKeys)
-        If AKeys(i) <> BKeys(i) Or A.Item(AKeys(i)) <> B.Item(BKeys(i)) Then
+        If AKeys(i) <> BKeys(i) Or a.item(AKeys(i)) <> B.item(BKeys(i)) Then
             IsDictionaryEqual = False
             Exit Function
         End If
@@ -385,32 +402,32 @@ Private Function IsDictionaryEqual(A As Variant, B As Variant) As Boolean
     IsDictionaryEqual = True
 End Function
 
-Private Function IsCollection(Value As Variant) As Boolean
-    IsCollection = VBA.VarType(Value) = VBA.vbObject And VBA.TypeName(Value) = "Collection"
+Private Function IsCollection(value As Variant) As Boolean
+    IsCollection = VBA.VarType(value) = VBA.vbObject And VBA.TypeName(value) = "Collection"
 End Function
 
-Private Function IsNothing(Value As Variant) As Boolean
-    If VBA.IsObject(Value) Then
-        IsNothing = Value Is Nothing
+Private Function IsNothing(value As Variant) As Boolean
+    If VBA.IsObject(value) Then
+        IsNothing = value Is Nothing
     Else
         IsNothing = False
     End If
 End Function
 
-Private Function ArrayIncludes(Values As Variant, Value As Variant) As Boolean
+Private Function ArrayIncludes(values As Variant, value As Variant) As Boolean
     Dim i As Long
-    For i = LBound(Values) To UBound(Values)
-        If VBA.IsArray(Values(i)) Then
-            If ArrayIncludes(Values(i), Value) Then
+    For i = LBound(values) To UBound(values)
+        If VBA.IsArray(values(i)) Then
+            If ArrayIncludes(values(i), value) Then
                 ArrayIncludes = True
                 Exit Function
             End If
-        ElseIf IsCollection(Values(i)) Then
-            If CollectionIncludes(Values(i), Value) Then
+        ElseIf IsCollection(values(i)) Then
+            If CollectionIncludes(values(i), value) Then
                 ArrayIncludes = True
                 Exit Function
             End If
-        ElseIf IsDeepEqual(Values(i), Value) Then
+        ElseIf IsDeepEqual(values(i), value) Then
             ArrayIncludes = True
             Exit Function
         End If
@@ -419,30 +436,30 @@ Private Function ArrayIncludes(Values As Variant, Value As Variant) As Boolean
     ArrayIncludes = False
 End Function
 
-Private Function CollectionIncludes(Values As Variant, Value As Variant) As Boolean
-    Dim Item As Variant
-    For Each Item In Values
-        If VBA.IsArray(Item) Then
-            If ArrayIncludes(Item, Value) Then
+Private Function CollectionIncludes(values As Variant, value As Variant) As Boolean
+    Dim item As Variant
+    For Each item In values
+        If VBA.IsArray(item) Then
+            If ArrayIncludes(item, value) Then
                 CollectionIncludes = True
                 Exit Function
             End If
-        ElseIf IsCollection(Item) Then
-            If CollectionIncludes(Item, Value) Then
+        ElseIf IsCollection(item) Then
+            If CollectionIncludes(item, value) Then
                 CollectionIncludes = True
                 Exit Function
             End If
-        ElseIf IsDeepEqual(Item, Value) Then
+        ElseIf IsDeepEqual(item, value) Then
             CollectionIncludes = True
             Exit Function
         End If
-    Next Item
+    Next item
     
     CollectionIncludes = False
 End Function
 
-Private Function IsApproximatelyEqual(A As Variant, B As Variant, SignificantFigures As Integer) As Boolean
-    If SignificantFigures < 1 Or SignificantFigures > 15 Or VBA.IsError(A) Or VBA.IsError(B) Then
+Private Function IsApproximatelyEqual(a As Variant, B As Variant, SignificantFigures As Integer) As Boolean
+    If SignificantFigures < 1 Or SignificantFigures > 15 Or VBA.IsError(a) Or VBA.IsError(B) Then
         IsApproximatelyEqual = False
         Exit Function
     End If
@@ -450,25 +467,25 @@ Private Function IsApproximatelyEqual(A As Variant, B As Variant, SignificantFig
     Dim AValue As String
     Dim BValue As String
     
-    AValue = VBA.Format$(A, VBA.Left$("0.00000000000000", SignificantFigures + 1) & IIf(A > 1, "e+0", "e-0"))
+    AValue = VBA.Format$(a, VBA.Left$("0.00000000000000", SignificantFigures + 1) & IIf(a > 1, "e+0", "e-0"))
     BValue = VBA.Format$(B, VBA.Left$("0.00000000000000", SignificantFigures + 1) & IIf(B > 1, "e+0", "e-0"))
     
     IsApproximatelyEqual = AValue = BValue
 End Function
 
-Private Function FormatMessage(Message As String, ParamArray Values() As Variant) As String
-    Dim Value As Variant
+Private Function FormatMessage(Message As String, ParamArray values() As Variant) As String
+    Dim value As Variant
     Dim Index As Long
     
     FormatMessage = Message
-    For Each Value In IIf(VBA.IsArray(Values(0)), Values(0), Values)
-        FormatMessage = VBA.Replace(FormatMessage, "{" & Index & "}", PrettyPrint(Value))
+    For Each value In IIf(VBA.IsArray(values(0)), values(0), values)
+        FormatMessage = VBA.Replace(FormatMessage, "{" & Index & "}", PrettyPrint(value))
         Index = Index + 1
-    Next Value
+    Next value
 End Function
 
-Private Function PrettyPrint(Value As Variant, Optional Indentation As Long = 0) As String
-    If VBA.IsMissing(Value) Then
+Private Function PrettyPrint(value As Variant, Optional Indentation As Long = 0) As String
+    If VBA.IsMissing(value) Then
         PrettyPrint = "[Missing]"
         Exit Function
     End If
@@ -477,50 +494,50 @@ Private Function PrettyPrint(Value As Variant, Optional Indentation As Long = 0)
     Dim Indented As String
     Indented = VBA.String$(Indentation + 1, "  ")
     
-    Select Case VBA.VarType(Value)
+    Select Case VBA.VarType(value)
     Case VBA.vbObject
         ' Nothing
-        If Value Is Nothing Then
+        If value Is Nothing Then
             PrettyPrint = "[Nothing]"
         
         ' Collection
-        ElseIf VBA.TypeName(Value) = "Collection" Then
+        ElseIf VBA.TypeName(value) = "Collection" Then
             PrettyPrint = "[Collection [" & vbNewLine
             
-            For i = 1 To Value.Count
+            For i = 1 To value.count
                 PrettyPrint = PrettyPrint & Indent(Indentation + 1) & _
-                    PrettyPrint(Value(i), Indentation + 1) & _
-                    IIf(i <> Value.Count, ",", "") & vbNewLine
+                    PrettyPrint(value(i), Indentation + 1) & _
+                    IIf(i <> value.count, ",", "") & vbNewLine
             Next i
             
             PrettyPrint = PrettyPrint & Indent(Indentation) & "]"
         
         ' Dictionary
-        ElseIf VBA.TypeName(Value) = "Dictionary" Then
+        ElseIf VBA.TypeName(value) = "Dictionary" Then
             PrettyPrint = "[Dictionary {" & vbNewLine
             
-            For i = LBound(Value.Keys) To UBound(Value.Keys)
+            For i = LBound(value.Keys) To UBound(value.Keys)
                 PrettyPrint = PrettyPrint & Indent(Indentation + 1) & _
-                    Value.Keys(i) & ": " & _
-                    PrettyPrint(Value.Item(Value.Keys(i)), Indentation + 1) & _
-                    IIf(i <> Value.Count, ",", "") & vbNewLine
+                    value.Keys(i) & ": " & _
+                    PrettyPrint(value.item(value.Keys(i)), Indentation + 1) & _
+                    IIf(i <> value.count, ",", "") & vbNewLine
             Next i
             
             PrettyPrint = PrettyPrint & Indent(Indentation) & "}]"
         
         ' Object
         Else
-            PrettyPrint = "[" & VBA.TypeName(Value) & "]"
+            PrettyPrint = "[" & VBA.TypeName(value) & "]"
         End If
         
     ' Array
     Case VBA.vbArray To VBA.vbArray + VBA.vbByte
         PrettyPrint = "[" & vbNewLine
         
-        For i = LBound(Value) To UBound(Value)
+        For i = LBound(value) To UBound(value)
             PrettyPrint = PrettyPrint & Indent(Indentation + 1) & _
-                PrettyPrint(Value(i), Indentation + 1) & _
-                IIf(i <> UBound(Value), ",", "") & vbNewLine
+                PrettyPrint(value(i), Indentation + 1) & _
+                IIf(i <> UBound(value), ",", "") & vbNewLine
         Next i
         
         PrettyPrint = PrettyPrint & Indent(Indentation) & "]"
@@ -535,11 +552,11 @@ Private Function PrettyPrint(Value As Variant, Optional Indentation As Long = 0)
     
     ' String
     Case VBA.vbString
-        PrettyPrint = """" & Value & """"
+        PrettyPrint = """" & value & """"
     
     ' Everything else
     Case Else
-        PrettyPrint = CStr(Value)
+        PrettyPrint = CStr(value)
     End Select
 End Function
 
